@@ -45,7 +45,7 @@ export default function AuthForm() {
           </button>
           <button
             type="button"
-            onClick={() => setMode("signup")}
+            onClick={() => { setMode("signup"); }}
             className={`px-6 py-2 text-sm font-semibold transition-all duration-300 ${
               mode === "signup"
                 ? "text-blue-600 border-b-2 border-blue-600"
