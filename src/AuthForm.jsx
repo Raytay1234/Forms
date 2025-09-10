@@ -7,6 +7,7 @@ export default function AuthForm() {
     email: "",
     password: "",
   });
+  const [showPopup, setShowPopup] = useState(false); // NEW
 
   const handleChange = (e) => {
     setFormData({
@@ -25,6 +26,8 @@ export default function AuthForm() {
     } else if (mode === "reset") {
       console.log("Resetting password for:", formData.email);
     }
+
+    setShowPopup(true); // show popup after submit
   };
 
   return (
@@ -45,7 +48,7 @@ export default function AuthForm() {
           </button>
           <button
             type="button"
-            onClick={() => { setMode("signup"); }}
+            onClick={() => setMode("signup")}
             className={`px-6 py-2 text-sm font-semibold transition-all duration-300 ${
               mode === "signup"
                 ? "text-blue-600 border-b-2 border-blue-600"
@@ -59,7 +62,6 @@ export default function AuthForm() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Sign Up → Needs Name */}
         {mode === "signup" && (
           <div>
             <label className="block text-gray-700 font-medium mb-2">
@@ -77,7 +79,6 @@ export default function AuthForm() {
           </div>
         )}
 
-        {/* Email Field (all modes need this) */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">
             Email Address
@@ -93,7 +94,6 @@ export default function AuthForm() {
           />
         </div>
 
-        {/* Password only for login/signup */}
         {mode !== "reset" && (
           <div>
             <label className="block text-gray-700 font-medium mb-2">
@@ -111,7 +111,6 @@ export default function AuthForm() {
           </div>
         )}
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
@@ -147,6 +146,34 @@ export default function AuthForm() {
             Back to Login
           </button>
         </p>
+      )}
+
+      {/* POPUP Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-80 text-center">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">
+              {mode === "login"
+                ? "Login Successful"
+                : mode === "signup"
+                ? "Account Created!"
+                : "Reset Link Sent"}
+            </h2>
+            <p className="text-gray-600 mb-6">
+              {mode === "login"
+                ? `Welcome back, ${formData.email}!`
+                : mode === "signup"
+                ? `Your account has been created with email ${formData.email}`
+                : `We’ve sent a reset link to ${formData.email}`}
+            </p>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
